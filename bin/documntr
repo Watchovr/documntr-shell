@@ -1,0 +1,95 @@
+#!/bin/bash
+
+while getopts "s:d:" opt; do
+  case $opt in
+    s)
+      src="$OPTARG"
+      ;;
+    d)
+      dest="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
+
+DEBUG=0
+
+function spin() {
+  spinner="/|\\-/|\\-"
+  while :; do
+    for i in $(seq 0 7); do
+      echo -n "${spinner:$i:1}"
+      echo -en "\010"
+      sleep 1
+    done
+  done
+}
+
+function die {
+  printf "Script failed: %s\n\n" "$1"
+  exit 1
+}
+
+function usage {
+  echo ""
+  echo "Generates a README.md file from a directory of files using ChatGPT"
+  echo ""
+  echo "usage: documntr --src string (./) --dest string (./README.md)"
+  echo ""
+  echo "  -s string   the directory to read files from (recursive)"
+  echo "                          (example: src/services/)"
+  echo "  -d string           where to write the file (Markdown, .md)"
+  echo "                          (example: src/services/README.md)"
+  echo ""
+}
+
+function run() {
+  mkdir -p /tmp/documntr
+
+  echo "🤖 Uploading code & generating README.md this might take a while..."
+  SRC_DIR="${src:-"./"}"
+  DEST_DIR="${dest:-"./README.md"}"
+
+  # Cat all files in a directory to a single string and prep for the API
+  OUT=$(tail -n +1 $SRC_DIR**/*)
+  DATA=$(jq -n --arg data "$OUT" '{"data":$data}')
+
+  spin &
+  SPIN_PID=$!
+  trap "kill -9 $SPIN_PID" $(seq 0 15)
+
+  # Call the API
+  if [[ $DEBUG == 1 ]]; then
+    echo "🔍 Debug mode enabled. Skipping API call."
+    echo "📂 Writing sample response to temp.json"
+    echo '{"data":"# Sample Response\n\n## Here is a newline"}' >/tmp/documntr/temp.json
+  else
+    curl --location --silent "$DOCUMNTR_API_URL" --header 'Content-Type: application/json' --data "$DATA" >/tmp/documntr/temp.json
+  fi
+
+  # Write the response to a file
+  TEMP=$(jq .data /tmp/documntr/temp.json | sed -e 's/^"//' -e 's/"$//')
+  echo -e "$TEMP" >"$DEST_DIR"
+  echo "🏁 File written to $DEST_DIR"
+  rm /tmp/documntr/temp.json
+}
+
+if [[ "$*" == *"-h"* ]] || [[ "$*" == *"--help"* ]]; then
+  usage
+  exit 0
+fi
+
+if [ -z "$DOCUMNTR_API_URL" ]; then
+  echo "No URL specified. Please set DOCUMNTR_API_URL."
+  exit 1
+fi
+
+run "$1" "$2"
