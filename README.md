@@ -4,6 +4,8 @@ Generates a `README.md` file from a directory of files using ChatGPT. 🤖
 
 Note: this README.md was generated (90%+) with this tool. The compiler compiled itself. The intention is that Documntr creates your first draft, you should still always revise and ensure what's printed is correct!
 
+VIDEO HERE
+
 ## Installation
 
 This codebase requires `jq` and `curl` to be installed.
