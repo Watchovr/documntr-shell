@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOCUMNTR_API_URL="https://documntr-api-ebbozuj3tq-ue.a.run.app/generate"
+
 while getopts "s:d:" opt; do
   case $opt in
     s)
