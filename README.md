@@ -1,10 +1,10 @@
-# Documntr
+# Documntr Shell
 
 Generates a `README.md` file from a directory of files using ChatGPT. 🤖
 
 Note: this README.md was generated (90%+) with this tool. The compiler compiled itself. The intention is that Documntr creates your first draft, you should still always revise and ensure what's printed is correct!
 
-VIDEO HERE
+![documntr-demo](https://user-images.githubusercontent.com/12818719/224070986-f66982b7-8622-4819-a756-31d73d8e3aa0.gif)
 
 ## Installation
 
