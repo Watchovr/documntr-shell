@@ -1,4 +1,4 @@
-# Welcome to the Codebase Documentation
+# Documntr Shell
 
 Hate documenting your code? So do we. Document your code with the power of OpenAI's ChatGPT model. (gpt-3.5-turbo)
 
