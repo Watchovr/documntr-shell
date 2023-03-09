@@ -1,61 +1,74 @@
-# Using the Documntr Codebase
+# Documntr Shell
 
-Welcome to the Documntr codebase! This document aims to explain everything you need to know to use the codebase with ease. 
+Hate documenting your code? So do we. Document your code with the power of OpenAI's ChatGPT model. (gpt-3.5-turbo)
+
+This tool interfaces with ChatGPT by uploading code you specify and it create a first-draft README.md document of the code you upload.
+
+This README was initially generated (90%+) by ChatGPT. The compiler has compiled itself.
+
+This documentation explains how to use the codebase and provides details for each component of the application.
 
 ## Prerequisites
 
-Before using this codebase, make sure you have the following installed on your system:
-- Bash (minimum 3.2)
-- cURL (minimum 7.64)
-- jq (minimum 1.6)
+Before you begin, you'll need a few things installed on your computer:
 
-## Installing
+- Bash
+- cURL
+- jq
 
-Just run: `zsh ./install.sh`
+## Get Started
 
-## Running the Code
+1. Clone the repository to your machine with Git
+```
+git clone https://github.com/example/example.git
+```
+2. Enter the directory
+```
+cd example
+```
+3. Install the necessary dependencies
+```
+npm install
+```
+4. Set a DOCUMNTR_API_URL environment variable with the URL of the ChatGPT API
 
-To run the code, execute the `documntr` script from the root directory. The script takes two optional parameters:
+## Using documntr Script
 
-1. `-s <dir>` which specifies the directory to read files from.
-2. `-d <file>` which specifies the target file to write the generated docs to.
+The `documntr` script generates a README.md file from a directory of files using ChatGPT. To use it, run the following command:
 
-By default, if no parameters are provided, the script will use the current directory as the source and `./README.md` as the destination.
-
-Here's an example command to generate the docs:
-
-```bash
-./documntr -s src/ -d docs/README.md
+```
+bash documntr.sh --src [source_directory] --dest [destination_file]
 ```
 
-## Components
+### Arguments
 
-The Documntr codebase has the following components:
+- `--src`: the directory to read files from (recursive). Default is `./`.
+- `--dest`: where to write the file (Markdown, .md). Default is `./README.md`.
 
-### spin
+## Code Structure
 
-A Bash function that displays a spinner animation to indicate that the script is working.
+The codebase is structured as follows:
 
-### die
+```
+example
+|- README.md # the main program documentation
+|- documntr.sh # script file
+|- src/
+   |- services/
+      |- service1.js
+      |- service2.js
+   |- models/
+      |- model.js
+```
 
-A Bash function that prints an error message and exits the script with a status code of 1.
+### Script File
 
-### usage
+`documntr.sh` is the main script file for generating a README.md file. 
 
-A Bash function that defines the command line usage of the script.
+### Services
 
-### run
+`services/` directory contains two sample JavaScript files (`service1.js` and `service2.js`). 
 
-The main function that generates the README.md file using the provided source and target paths.
+### Models
 
-### documntr
-
-The main Bash script that is executed to generate the docs.
-
-### API
-
-The Documntr codebase interacts with an API to generate the docs. The API endpoint URL should be specified in the `DOCUMNTR_API_URL` environment variable.
-
-## Conclusion
-
-That's it for the overview of the Documntr codebase! We hope this document has provided you with enough information to use the codebase effectively. If you have any further questions or issues, please refer to the codebase documentation or reach out to the developer team.
+`models/` directory contains a sample JavaScript file (`model.js`).
