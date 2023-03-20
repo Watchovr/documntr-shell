@@ -1,28 +1,26 @@
 #!/bin/bash
 
+DEBUG=0
 DOCUMNTR_API_URL="https://documntr-api-ebbozuj3tq-ue.a.run.app/generate"
 
 while getopts "s:d:" opt; do
   case $opt in
-    s)
-      src="$OPTARG"
-      ;;
-    d)
-      dest="$OPTARG"
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
+  s)
+    src="$OPTARG"
+    ;;
+  d)
+    dest="$OPTARG"
+    ;;
+  \?)
+    echo "Invalid option: -$OPTARG" >&2
+    exit 1
+    ;;
+  :)
+    echo "Option -$OPTARG requires an argument." >&2
+    exit 1
+    ;;
   esac
 done
-
-
-DEBUG=0
 
 function spin() {
   spinner="/|\\-/|\\-"
@@ -62,7 +60,7 @@ function run() {
 
   # Cat all files in a directory to a single string and prep for the API
   OUT=$(tail -n +1 $SRC_DIR**/*)
-  DATA=$(jq -n --arg data "$OUT" '{"data":$data}')
+  DATA=$(jq -n --arg data "$OUT" '{"data": $data}')
 
   spin &
   SPIN_PID=$!
